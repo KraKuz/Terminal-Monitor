@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './App.css';
-
-type Terminal = {
-  id: number;
-  name: string;
-  hasOrder: boolean;
-};
-
-type OrderItem = {
-  id: number;
-  name: string;
-  plan: string;
-  fact: string;
-  status: "none" | "more" | "done" | "loading"; // цвета
-  isUpdating?: boolean; // для анимации
-};
+import { Terminal } from "./types/Terminal";
+import { OrderItem } from "./types/OrderItem";
 
 const terminals: Terminal[] = [
   { id: 1, name: "Терминал №1", hasOrder: true },

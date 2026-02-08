@@ -89,7 +89,7 @@
 
 /* --- Таблица заказа --- */
 .order-table {
-  width: 95%;
+  width: 98%;
   margin: 10px auto 20px auto;
   border-collapse: collapse;
   font-size: 14px;
@@ -120,4 +120,22 @@
 
 .status-loading {
   background-color: #ffffff; /* белый */
+}
+
+/* --- Подвал --- */
+.footer-table {
+  width: 98%;
+  margin: 20px auto 20px auto;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.footer-table th {
+  background-color: #b7dff2; /* небесно голубой */
+  padding: 8px;
+  text-align: left;
+}
+
+.footer-table td {
+  padding: 6px 8px;
 }

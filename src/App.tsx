@@ -27,10 +27,10 @@ const terminals: Terminal[] = [
 
 // Тестовые данные для таблицы
 const testOrderItems: OrderItem[] = [
-  { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "none" },
+  { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
   { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
   { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
-  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "loading" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
 ];
 
 function App() {
@@ -105,7 +105,35 @@ function App() {
           </tbody>
         </table>
       )}
-      
+
+      {/* Подвал */}
+      <table className="footer-table">
+        <thead>
+          <tr>
+            <th>Цвет</th>
+            <th>Значение</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr className="status-none">
+            <td>Красный</td>
+            <td>Нет в заказе</td>
+          </tr>
+          <tr className="status-more">
+            <td>Оранжевый</td>
+            <td>Больше чем в заказе</td>
+          </tr>
+          <tr className="status-done">
+            <td>Зелёный</td>
+            <td>Погрузка выполнена</td>
+          </tr>
+          <tr className="status-loading">
+            <td>Белый</td>
+            <td>Погрузка</td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
   );
 }

@@ -3,6 +3,7 @@ import './App.css';
 import { Terminal } from "./types/Terminal";
 import { OrderItem } from "./types/OrderItem";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 const terminals: Terminal[] = [
   { id: 1, name: "Терминал №1", hasOrder: true },
@@ -60,16 +61,9 @@ function App() {
 
   return (
     <div className="app-container">
+      
       {/* Верхний хедер */}
-      <header className="header">
-        <div className="header-title">
-          Монитор погрузочных терминалов
-        </div>
-        <div className="header-time">
-          {currentTime.toLocaleDateString("ru-RU")}{" "}
-          {currentTime.toLocaleTimeString("ru-RU")}
-        </div>
-      </header>
+      <Header currentTime={currentTime} />
 
       {/* Панель терминалов */}
       <div className="terminals-container">

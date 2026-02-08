@@ -52,3 +52,72 @@
 .status-dot.red {
   background-color: #eb5757; /* пастельный красный */
 }
+
+/* --- Контейнер заказа --- */
+.order-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #f0f4f5;
+  margin: 10px 20px;
+  border-radius: 8px;
+}
+
+.order-left h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.order-left p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.order-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.traffic-light {
+  width: 30px;
+  height: 30px;
+  background-color: #ff0000; /* яркий красный светофор */
+  border-radius: 50%;
+  margin-top: 8px;
+}
+
+/* --- Таблица заказа --- */
+.order-table {
+  width: 95%;
+  margin: 10px auto 20px auto;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.order-table th {
+  background-color: #b7dff2; /* небесно голубой */
+  padding: 8px;
+  text-align: left;
+}
+
+.order-table td {
+  padding: 6px 8px;
+}
+
+/* Статусы строк */
+.status-none {
+  background-color: #f8d7d7; /* пастельный красный */
+}
+
+.status-more {
+  background-color: #fbe7a0; /* пастельный оранжевый */
+}
+
+.status-done {
+  background-color: #c8f0c8; /* пастельный зеленый */
+}
+
+.status-loading {
+  background-color: #ffffff; /* белый */
+}

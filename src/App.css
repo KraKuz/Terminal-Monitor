@@ -1,10 +1,49 @@
+:root {
+  /* Постельные цвета */
+  --pastel-blue: #b7dff2;
+  --pastel-green: #c8f0c8;
+  --pastel-red: #f8d7d7;
+  --pastel-yellow: #fff3b0;
+  --pastel-orange: #fbe7a0;
+  --pastel-white: #f0f4f5;
+  --pastel-dark-white: #f5f7f8;
+  --pastel-grey: #d0d7de;
+
+  /* Цвета светофора */
+  --traffic-light-red: #ff4d4d;
+  --traffic-light-green: #2ecc71;
+  --traffic-light-yellow: #ffd700;
+
+  --dot-red: #eb5757;
+  --dot-green: #6fcf97;
+
+  --border-blue: #7fbce3;
+}
+
+/* --- Корневой контейнер приложения --- */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* растягивает контейнер на всю высоту окна */
+}
+
+/* --- Контент между шапкой и подвалом --- */
+.app-content {
+  flex: 1;
+}
+
 /* --- Хедер --- */
 .header {
-  background-color: #b7dff2; /* пастельный голубой */
+  background-color: var(--pastel-blue);
   padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* тень */
 }
 
 .header-title {
@@ -22,7 +61,11 @@
   flex-wrap: wrap;
   gap: 10px;
   padding: 12px 20px;
-  background-color: #f5f7f8;
+  background-color: var(--pastel-dark-white);
+
+  position: sticky;
+  top: 51px; 
+  z-index: 999;
 }
 
 .terminal-button {
@@ -30,11 +73,17 @@
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  background-color: #ffffff;
-  border: 1px solid #d0d7de;
+  background-color: white;
+  border: 1px solid var(--pastel-grey);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+}
+
+/* --- Активная кнопка терминала --- */
+.terminal-button.active {
+  background-color: var(--pastel-blue);
+  border-color: var(--border-blue);
 }
 
 .status-dot {
@@ -46,21 +95,23 @@
 
 /* Зеленый и красный для кружка (можно через дополнительные классы) */
 .status-dot.green {
-  background-color: #6fcf97; /* пастельный зелёный */
+  background-color: var(--dot-green);
 }
 
 .status-dot.red {
-  background-color: #eb5757; /* пастельный красный */
+  background-color: var(--dot-red);
 }
 
 /* --- Контейнер заказа --- */
 .order-container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   padding: 20px;
-  background-color: #f0f4f5;
+  background-color: var(--pastel-white);
   margin: 10px 20px;
   border-radius: 8px;
+  border: 1px solid var(--pastel-grey);
 }
 
 .order-left h3 {
@@ -79,12 +130,16 @@
   align-items: center;
 }
 
+.order-right p {
+  margin: 0 0 0 0;
+}
+
 .traffic-light {
   width: 30px;
   height: 30px;
-  background-color: #ff0000; /* яркий красный светофор */
+  background-color: var(--traffic-light-red);
   border-radius: 50%;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 /* --- Таблица заказа --- */
@@ -93,10 +148,11 @@
   margin: 10px auto 20px auto;
   border-collapse: collapse;
   font-size: 14px;
+  table-layout: fixed;
 }
 
 .order-table th {
-  background-color: #b7dff2; /* небесно голубой */
+  background-color: var(--pastel-blue);
   padding: 8px;
   text-align: left;
 }
@@ -105,21 +161,28 @@
   padding: 6px 8px;
 }
 
+/* Анимация обновления строки */
+.order-table tr.updating {
+  background-color: yellow !important;
+  font-weight: bold;
+  transition: background-color 0.5s ease;
+}
+
 /* Статусы строк */
 .status-none {
-  background-color: #f8d7d7; /* пастельный красный */
+  background-color: var(--pastel-red);
 }
 
 .status-more {
-  background-color: #fbe7a0; /* пастельный оранжевый */
+  background-color: var(--pastel-orange);
 }
 
 .status-done {
-  background-color: #c8f0c8; /* пастельный зеленый */
+  background-color: var(--pastel-green);
 }
 
 .status-loading {
-  background-color: #ffffff; /* белый */
+  background-color: white;
 }
 
 /* --- Подвал --- */
@@ -131,7 +194,7 @@
 }
 
 .footer-table th {
-  background-color: #b7dff2; /* небесно голубой */
+  background-color: var(--pastel-blue); /* небесно голубой */
   padding: 8px;
   text-align: left;
 }

@@ -13,6 +13,7 @@ type OrderItem = {
   plan: string;
   fact: string;
   status: "none" | "more" | "done" | "loading"; // цвета
+  isUpdating?: boolean; // для анимации
 };
 
 const terminals: Terminal[] = [
@@ -35,7 +36,8 @@ const testOrderItems: OrderItem[] = [
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(terminals[0]);
+  const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>(testOrderItems);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -43,9 +45,33 @@ function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+  
+  // Демо обновления строки таблицы
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOrderItems(prev => {
+        const newItems = [...prev];
+        const idx = 1; // обновляем вторую строку для примера
+        newItems[idx] = {
+          ...newItems[idx],
+          status: newItems[idx].status === "done" ? "loading" : "done",
+          isUpdating: true,
+        };
+        setTimeout(() => {
+          setOrderItems(current => {
+            const updated = [...current];
+            updated[idx] = { ...updated[idx], isUpdating: false };
+            return updated;
+          });
+        }, 2000); // сброс анимации через 2 секунды
+        return newItems;
+      });
+    }, 4000); // каждые 4 секунды
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div>
+    <div className="app-container">
       {/* Верхний хедер */}
       <header className="header">
         <div className="header-title">
@@ -60,12 +86,19 @@ function App() {
       {/* Панель терминалов */}
       <div className="terminals-container">
         {terminals.map((terminal) => (
-          <button key={terminal.id} className="terminal-button">
+          <button
+            key={terminal.id}
+            className={`terminal-button ${terminal.id === selectedTerminal?.id ? "active" : ""}`}
+            onClick={() => setSelectedTerminal(terminal)}
+          >
             <span className={`status-dot ${terminal.hasOrder ? "green" : "red"}`} />
             {terminal.name}
           </button>
         ))}
       </div>
+
+      {/* Основной контент */}
+      <div className="app-content">
 
       {/* Контейнер с информацией о заказе */}
       {selectedTerminal && selectedTerminal.hasOrder && (
@@ -94,8 +127,8 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {testOrderItems.map(item => (
-              <tr key={item.id} className={`status-${item.status}`}>
+            {orderItems.map(item => (
+              <tr key={item.id} className={`status-${item.status} ${item.isUpdating ? "updating" : ""}`}>
                 <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.plan}</td>
@@ -105,8 +138,10 @@ function App() {
           </tbody>
         </table>
       )}
+      </div>
 
       {/* Подвал */}
+      {selectedTerminal && selectedTerminal.hasOrder && (
       <table className="footer-table">
         <thead>
           <tr>
@@ -133,6 +168,7 @@ function App() {
           </tr>
         </tbody>
       </table>
+      )}
 
     </div>
   );

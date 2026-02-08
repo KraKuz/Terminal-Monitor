@@ -4,6 +4,8 @@ import { Terminal } from "./types/Terminal";
 import { OrderItem } from "./types/OrderItem";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import TerminalSelector from "./components/TerminalSelector";
+
 
 const terminals: Terminal[] = [
   { id: 1, name: "Терминал №1", hasOrder: true },
@@ -21,12 +23,41 @@ const testOrderItems: OrderItem[] = [
   { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
   { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
   { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
+    { id: 1, name: 'Унитаз-компакт "Рио" (Рио) Черный кракелюр', plan: '12 (1+0)', fact: '0 (0+0)', status: "loading" },
+  { id: 2, name: 'Умывальник "Комфорт" Белый', plan: '192 (6+0)', fact: '192 (6+0)', status: "done" },
+  { id: 3, name: 'Пьедестал Белый', plan: '35 (1+0)', fact: '35 (1+0)', status: "more" },
+  { id: 4, name: 'Унитаз-компакт "Детский" (Прайм) Белый', plan: '12 (1+0)', fact: '12 (1+0)', status: "none" },
 ];
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
   const [orderItems, setOrderItems] = useState<OrderItem[]>(testOrderItems);
+  const handleSelectTerminal = (terminal: Terminal) => { setSelectedTerminal(terminal); };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -66,18 +97,11 @@ function App() {
       <Header currentTime={currentTime} />
 
       {/* Панель терминалов */}
-      <div className="terminals-container">
-        {terminals.map((terminal) => (
-          <button
-            key={terminal.id}
-            className={`terminal-button ${terminal.id === selectedTerminal?.id ? "active" : ""}`}
-            onClick={() => setSelectedTerminal(terminal)}
-          >
-            <span className={`status-dot ${terminal.hasOrder ? "green" : "red"}`} />
-            {terminal.name}
-          </button>
-        ))}
-      </div>
+      <TerminalSelector
+        terminals={terminals}
+        selectedTerminal={selectedTerminal}
+        onSelect={handleSelectTerminal}
+      />
 
       {/* Основной контент */}
       <div className="app-content">

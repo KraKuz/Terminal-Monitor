@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './App.css';
 import { Terminal } from "./types/Terminal";
 import { OrderItem } from "./types/OrderItem";
+import Footer from "./components/Footer";
 
 const terminals: Terminal[] = [
   { id: 1, name: "Терминал №1", hasOrder: true },
@@ -128,34 +129,7 @@ function App() {
       </div>
 
       {/* Подвал */}
-      {selectedTerminal && selectedTerminal.hasOrder && (
-      <table className="footer-table">
-        <thead>
-          <tr>
-            <th>Цвет</th>
-            <th>Значение</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="status-none">
-            <td>Красный</td>
-            <td>Нет в заказе</td>
-          </tr>
-          <tr className="status-more">
-            <td>Оранжевый</td>
-            <td>Больше чем в заказе</td>
-          </tr>
-          <tr className="status-done">
-            <td>Зелёный</td>
-            <td>Погрузка выполнена</td>
-          </tr>
-          <tr className="status-loading">
-            <td>Белый</td>
-            <td>Погрузка</td>
-          </tr>
-        </tbody>
-      </table>
-      )}
+      <Footer visible={!!selectedTerminal && selectedTerminal.hasOrder} />
 
     </div>
   );

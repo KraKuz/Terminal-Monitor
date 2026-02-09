@@ -11,13 +11,15 @@
 
   /* Цвета светофора */
   --traffic-light-red: #ff4d4d;
-  --traffic-light-green: #2ecc71;
-  --traffic-light-yellow: #ffd700;
+  --traffic-light-red-border: #990000;
+  --traffic-light-green: #4aff96;
+  --traffic-light-green-border: #00ac48;
 
   --dot-red: #eb5757;
   --dot-green: #6fcf97;
 
   --border-blue: #7fbce3;
+  --border-grey: #aaaaaa;
 }
 
 /* --- Корневой контейнер приложения --- */
@@ -39,20 +41,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* тень */
 }
 
 .header-title {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 600;
 }
 
 .header-time {
-  font-size: 14px;
+  font-size: 20px;
 }
 
 /* --- Панель терминалов --- */
@@ -62,10 +59,6 @@
   gap: 10px;
   padding: 12px 20px;
   background-color: var(--pastel-dark-white);
-
-  position: sticky;
-  top: 51px; 
-  z-index: 999;
 }
 
 .terminal-button {
@@ -77,7 +70,7 @@
   border: 1px solid var(--pastel-grey);
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 /* --- Активная кнопка терминала --- */
@@ -87,13 +80,13 @@
 }
 
 .status-dot {
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   display: inline-block;
 }
 
-/* Зеленый и красный для кружка (можно через дополнительные классы) */
+/* Зеленый и красный для кружка */
 .status-dot.green {
   background-color: var(--dot-green);
 }
@@ -108,57 +101,71 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 20px;
-  background-color: var(--pastel-white);
+  background-color: var(--traffic-light-green);
   margin: 10px 20px;
   border-radius: 8px;
-  border: 1px solid var(--pastel-grey);
+  border: 2px solid var(--traffic-light-green-border);
 }
 
 .order-left h3 {
   margin: 0 0 8px 0;
-  font-size: 18px;
+  font-size: 25px;
 }
 
 .order-left p {
   margin: 4px 0;
-  font-size: 14px;
-}
-
-.order-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.order-right p {
-  margin: 0 0 0 0;
-}
-
-.traffic-light {
-  width: 30px;
-  height: 30px;
-  background-color: var(--traffic-light-red);
-  border-radius: 50%;
-  margin-top: 20px;
+  font-size: 20px;
 }
 
 /* --- Таблица заказа --- */
 .order-table {
-  width: 98%;
-  margin: 10px auto 20px auto;
   border-collapse: collapse;
-  font-size: 14px;
+  width: 98%;
+  margin: 10px auto 10px auto;
+  border-collapse: collapse;
+  font-size: 18px;
   table-layout: fixed;
 }
 
 .order-table th {
+  border: 2px solid var(--border-grey);
   background-color: var(--pastel-blue);
   padding: 8px;
   text-align: left;
 }
 
 .order-table td {
+  border: 2px solid var(--border-grey);
   padding: 6px 8px;
+  width: 10px;
+  max-width: 10px;
+}
+
+.col-id {
+  width: 8%;
+  max-width: 8%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.col-plan {
+  width: 15%;
+  max-width: 15%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.col-fact {
+  width: 15%;
+  max-width: 15%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* Анимация обновления строки */
@@ -188,17 +195,20 @@
 /* --- Подвал --- */
 .footer-table {
   width: 98%;
-  margin: 20px auto 20px auto;
+  margin: 10px auto 20px auto;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 18px;
+  border: 2px solid var(--border-grey);
 }
 
 .footer-table th {
-  background-color: var(--pastel-blue); /* небесно голубой */
+  background-color: var(--pastel-blue);
   padding: 8px;
   text-align: left;
+  border: 2px solid var(--border-grey);
 }
 
 .footer-table td {
   padding: 6px 8px;
+  border: 2px solid var(--border-grey);
 }

@@ -14,11 +14,6 @@ function OrderInfo({ terminal }: OrderInfoProps) {
         <p>Заказчик: Стиль</p>
         <p>Начало погрузки: 04.02.2026 17:18:16</p>
       </div>
-
-      <div className="order-right">
-        <p>Светофор:</p>
-        <div className="traffic-light" />
-      </div>
     </div>
   );
 }

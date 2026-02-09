@@ -11,8 +11,8 @@ export const orderItemsMock: OrderItem[] = [
   {
     id: 2,
     name: 'Умывальник "Комфорт" Белый',
-    plan: "192 (6+0)",
-    fact: "192 (6+0)",
+    plan: "192 (33+20)",
+    fact: "192 (33+20)",
     status: "done",
   },
   {

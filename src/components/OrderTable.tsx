@@ -9,10 +9,10 @@ function OrderTable({ items }: OrderTableProps) {
     <table className="order-table">
       <thead>
         <tr>
-          <th>№ п/п</th>
+          <th className="col-id">№ п/п</th>
           <th>Наименование</th>
-          <th>План (n)</th>
-          <th>Факт (n)</th>
+          <th className="col-plan">План (n)</th>
+          <th className="col-fact">Факт (n)</th>
         </tr>
       </thead>
 
@@ -24,7 +24,7 @@ function OrderTable({ items }: OrderTableProps) {
               item.isUpdating ? "updating" : ""
             }`}
           >
-            <td>{item.id}</td>
+            <td >{item.id}</td>
             <td>{item.name}</td>
             <td>{item.plan}</td>
             <td>{item.fact}</td>

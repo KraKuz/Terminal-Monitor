@@ -15,11 +15,15 @@ import { orderItemsMock } from "./mock/orderItems";
 
 import { useCurrentTime } from "./hooks/useCurrentTime";
 import { useOrderUpdates } from "./hooks/useOrderUpdates";
+import { useWsHealth } from "./hooks/useWsHealth";
 
 function App() {
 
   // текущее время
   const currentTime = useCurrentTime();
+
+  // есть ли соединение
+  const isWsAlive = useWsHealth();
 
   // выбранный терминал
   const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
@@ -36,7 +40,7 @@ function App() {
     <div className="app-container">
       
       {/* Верхний хедер */}
-      <Header currentTime={currentTime} />
+      <Header currentTime={currentTime} isConnected={isWsAlive} />
 
       {/* Панель терминалов */}
       <TerminalSelector

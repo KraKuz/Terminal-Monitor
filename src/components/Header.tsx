@@ -1,8 +1,11 @@
+import React from "react";
+
 type HeaderProps = {
   currentTime: Date;
+  isConnected: boolean;
 };
 
-function Header({ currentTime }: HeaderProps) {
+const Header: React.FC<HeaderProps> = ({ currentTime, isConnected }) => {
   return (
     <header className="header">
       <div className="header-title">
@@ -11,6 +14,8 @@ function Header({ currentTime }: HeaderProps) {
       <div className="header-time">
         {currentTime.toLocaleDateString("ru-RU")}{" "}
         {currentTime.toLocaleTimeString("ru-RU")}
+        {" | "}
+        WS: {isConnected ? "OK" : "NO"}
       </div>
     </header>
   );

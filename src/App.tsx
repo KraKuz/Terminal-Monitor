@@ -18,6 +18,7 @@ import { useOrderUpdates } from "./hooks/useOrderUpdates";
 import { useWsHealth } from "./hooks/useWsHealth";
 import { useTerminals } from "./hooks/useTerminals";
 import { useTerminalStatuses } from "./hooks/useTerminalStatuses";
+import { useOrderInfo } from "./hooks/useOrderInfo";
 
 function App() {
 
@@ -33,6 +34,8 @@ function App() {
   // список терминалов
   const terminals = useTerminals();
   const terminalStatuses = useTerminalStatuses(terminals);
+
+  const orderInfo = useOrderInfo(selectedTerminal?.id);
 
   // позиции заказа
   const [orderItems, setOrderItems] = useState<OrderItem[]>(orderItemsMock);
@@ -60,7 +63,7 @@ function App() {
       <div className="app-content">
 
         {/* Контейнер с информацией о заказе */}
-        {selectedTerminal && terminalStatuses[selectedTerminal.id] && ( <OrderInfo terminal={selectedTerminal} /> )}
+        {selectedTerminal && terminalStatuses[selectedTerminal.id] && orderInfo && ( <OrderInfo terminal={selectedTerminal} orderInfo={orderInfo} /> )}
 
         {/* Таблица заказа */}
         {selectedTerminal && terminalStatuses[selectedTerminal.id] && ( <OrderTable items={orderItems} /> )}

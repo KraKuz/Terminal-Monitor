@@ -1,18 +1,21 @@
 import { Terminal } from "../types/Terminal";
+import { OrderInfoData } from "../hooks/useOrderInfo";
 
 type OrderInfoProps = {
   terminal: Terminal;
+  orderInfo: OrderInfoData;
 };
 
-function OrderInfo({ terminal }: OrderInfoProps) {
+function OrderInfo({ terminal, orderInfo }: OrderInfoProps) {
   return (
     <div className="order-container">
       <div className="order-left">
         <h3>
-          {terminal.name} Заказ № 000-003312 от 30.12.2025
+          {terminal.name} Заказ № {orderInfo.name}
         </h3>
-        <p>Заказчик: Стиль</p>
-        <p>Начало погрузки: 04.02.2026 17:18:16</p>
+        <p>Заказчик: {orderInfo.contractor}</p>
+        <p>Начало погрузки:{" "}
+          {new Date(orderInfo.shipmentStart).toLocaleString("ru-RU")}</p>
       </div>
     </div>
   );

@@ -4,9 +4,10 @@ type Props = {
   terminals: Terminal[];
   selectedTerminal: Terminal | null;
   onSelect: (terminal: Terminal) => void;
+  statuses: Record<number, boolean>;
 };
 
-function TerminalSelector({ terminals, selectedTerminal, onSelect }: Props) {
+function TerminalSelector({ terminals, selectedTerminal, onSelect, statuses }: Props) {
   return (
     <div className="terminals-container">
       {terminals.map(terminal => (
@@ -17,7 +18,7 @@ function TerminalSelector({ terminals, selectedTerminal, onSelect }: Props) {
           }`}
           onClick={() => onSelect(terminal)}
         >
-          <span className={`status-dot ${terminal.hasOrder ? "green" : "red"}`} />
+          <span className={`status-dot ${statuses[terminal.id] ? "green" : "red"}`} />
           {terminal.name}
         </button>
       ))}

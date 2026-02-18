@@ -17,7 +17,6 @@ export function useWsHealth() {
 
     return () => {
       clearInterval(interval);
-      wsService.close();
     };
   }, []);
 

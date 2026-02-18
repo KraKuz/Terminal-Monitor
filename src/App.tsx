@@ -16,6 +16,8 @@ import { orderItemsMock } from "./mock/orderItems";
 import { useCurrentTime } from "./hooks/useCurrentTime";
 import { useOrderUpdates } from "./hooks/useOrderUpdates";
 import { useWsHealth } from "./hooks/useWsHealth";
+import { useTerminals } from "./hooks/useTerminals";
+import { useTerminalStatuses } from "./hooks/useTerminalStatuses";
 
 function App() {
 
@@ -27,6 +29,10 @@ function App() {
 
   // выбранный терминал
   const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
+
+  // список терминалов
+  const terminals = useTerminals();
+  const terminalStatuses = useTerminalStatuses(terminals);
 
   // позиции заказа
   const [orderItems, setOrderItems] = useState<OrderItem[]>(orderItemsMock);
@@ -44,24 +50,25 @@ function App() {
 
       {/* Панель терминалов */}
       <TerminalSelector
-        terminals={terminalsMock}
+        terminals={terminals}
         selectedTerminal={selectedTerminal}
         onSelect={handleSelectTerminal}
+        statuses={terminalStatuses}
       />
 
       {/* Основной контент */}
       <div className="app-content">
 
         {/* Контейнер с информацией о заказе */}
-        {selectedTerminal && selectedTerminal.hasOrder && ( <OrderInfo terminal={selectedTerminal} /> )}
+        {selectedTerminal && terminalStatuses[selectedTerminal.id] && ( <OrderInfo terminal={selectedTerminal} /> )}
 
         {/* Таблица заказа */}
-        {selectedTerminal && selectedTerminal.hasOrder && ( <OrderTable items={orderItems} /> )}
+        {selectedTerminal && terminalStatuses[selectedTerminal.id] && ( <OrderTable items={orderItems} /> )}
       
       </div>
 
       {/* Подвал */}
-      <Footer visible={!!selectedTerminal && selectedTerminal.hasOrder} />
+      <Footer visible={!!selectedTerminal && terminalStatuses[selectedTerminal.id]} />
 
     </div>
   );

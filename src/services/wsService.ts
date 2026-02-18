@@ -1,18 +1,24 @@
 import { appConfig } from "../config/appConfig";
 
+type Listener = (msg: string) => void;
+
 class WSService {
   private socket: WebSocket | null = null;
+  private listeners: Listener[] = [];
 
-  connect(onMessage: (msg: any) => void) {
-    this.socket = new WebSocket(appConfig.url);
+  connect(onMessage: Listener) {
+    if (!this.socket) {
+      this.socket = new WebSocket(appConfig.url);
 
-    this.socket.onmessage = (event) => {
-      onMessage(event.data);
-    };
+      this.socket.onmessage = (event) => {
+        this.listeners.forEach(listener => listener(event.data));
+      };
 
-    this.socket.onerror = (err) => {
-      console.error("WS error:", err);
-    };
+      this.socket.onerror = (err) => {
+        console.error("WS error:", err);
+      };
+    }
+    this.listeners.push(onMessage);
   }
 
   send(message: string) {
@@ -22,6 +28,8 @@ class WSService {
 
   close() {
     this.socket?.close();
+    this.socket = null;
+    this.listeners = [];
   }
 }
 

@@ -1,14 +1,19 @@
 import { Terminal } from "../types/Terminal";
 import { OrderInfoData } from "../hooks/useOrderInfo";
+import { TrafficLightStatus } from "../types/TrafficLight";
+import { trafficLightToClass } from "../utils/trafficLightToClass";
 
 type OrderInfoProps = {
   terminal: Terminal;
   orderInfo: OrderInfoData;
+  trafficLight: TrafficLightStatus | null;
 };
 
-function OrderInfo({ terminal, orderInfo }: OrderInfoProps) {
+function OrderInfo({ terminal, orderInfo, trafficLight }: OrderInfoProps) {
+  const trafficClass = trafficLightToClass(trafficLight);
+  
   return (
-    <div className="order-container">
+    <div className={`order-container ${trafficClass}`}>
       <div className="order-left">
         <h3>
           {terminal.name} Заказ № {orderInfo.name}

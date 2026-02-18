@@ -14,12 +14,36 @@
   --traffic-light-red-border: #990000;
   --traffic-light-green: #4aff96;
   --traffic-light-green-border: #00ac48;
+  --traffic-light-default: #f5f7f8;
+  --traffic-light-default-border: #d0d7de;
 
   --dot-red: #eb5757;
   --dot-green: #6fcf97;
 
   --border-blue: #7fbce3;
   --border-grey: #aaaaaa;
+}
+
+/* --- Статусы светофора --- */
+
+.traffic-green {
+  background-color: var(--traffic-light-green);
+  border: 2px solid var(--traffic-light-green-border);
+}
+
+.traffic-red {
+  background-color: var(--traffic-light-red);
+  border: 2px solid var(--traffic-light-red-border);
+}
+
+.traffic-wait {
+  background-color: #ffe58a; /* если надо*/
+  border: 2px solid #d4a017; /* если надо*/
+}
+
+.traffic-default {
+  background-color: var(--traffic-light-default);
+  border: 2px solid var(--traffic-light-default-border);
 }
 
 /* --- Корневой контейнер приложения --- */
@@ -101,10 +125,8 @@
   justify-content: space-between;
   align-items: flex-start;
   padding: 20px;
-  background-color: var(--traffic-light-green);
   margin: 10px 20px;
   border-radius: 8px;
-  border: 2px solid var(--traffic-light-green-border);
 }
 
 .order-left h3 {

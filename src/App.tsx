@@ -20,6 +20,7 @@ import { useTerminals } from "./hooks/useTerminals";
 import { useTerminalStatuses } from "./hooks/useTerminalStatuses";
 import { useOrderInfo } from "./hooks/useOrderInfo";
 import { useOrderDetails } from "./hooks/useOrderDetails";
+import { useTrafficLight } from "./hooks/useTrafficLight";
 
 function App() {
 
@@ -37,6 +38,8 @@ function App() {
   const terminalStatuses = useTerminalStatuses(terminals);
 
   const orderInfo = useOrderInfo(selectedTerminal?.id);
+
+  const trafficLight = useTrafficLight(selectedTerminal?.id ?? null);
 
   // позиции заказа
   const orderItems = useOrderDetails(selectedTerminal?.id ?? null);
@@ -61,7 +64,7 @@ function App() {
       <div className="app-content">
 
         {/* Контейнер с информацией о заказе */}
-        {selectedTerminal && terminalStatuses[selectedTerminal.id] && orderInfo && ( <OrderInfo terminal={selectedTerminal} orderInfo={orderInfo} /> )}
+        {selectedTerminal && terminalStatuses[selectedTerminal.id] && orderInfo && ( <OrderInfo terminal={selectedTerminal} orderInfo={orderInfo} trafficLight={trafficLight}/> )}
 
         {/* Таблица заказа */}
         {selectedTerminal && terminalStatuses[selectedTerminal.id] && ( <OrderTable items={orderItems} /> )}

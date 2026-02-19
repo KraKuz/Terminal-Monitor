@@ -24,7 +24,7 @@ export function useTrafficLight(terminalId: number | null) {
   }, [terminalId]);
 
   useEffect(() => {
-    const handleMessage = (msg: string) => {
+    const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed: TrafficLightResponse = JSON.parse(msg);
 
@@ -32,11 +32,9 @@ export function useTrafficLight(terminalId: number | null) {
           setStatus(parsed.Value);
         }
       } catch {}
-    };
+    });
 
-    wsService.connect(handleMessage);
-
-    return () => wsService.close();
+    return unsubscribe;
   }, []);
 
   return status;

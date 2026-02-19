@@ -5,11 +5,11 @@ export function useWsHealth() {
   const [isAlive, setIsAlive] = useState(false);
 
   useEffect(() => {
-    wsService.connect((msg) => {
-      if (msg === "OK") {
-        setIsAlive(true);
-      }
-    });
+  const unsubscribe = wsService.subscribe((msg) => {
+    if (msg === "OK") {
+      setIsAlive(true);
+    }
+  });
 
     const interval = setInterval(() => {
       wsService.send("[health]");
@@ -17,6 +17,7 @@ export function useWsHealth() {
 
     return () => {
       clearInterval(interval);
+      unsubscribe();
     };
   }, []);
 

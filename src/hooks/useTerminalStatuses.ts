@@ -23,7 +23,7 @@ export function useTerminalStatuses(terminals: { id: number }[]) {
   }, [terminals]);
 
   useEffect(() => {
-    wsService.connect((msg) => {
+    const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed = JSON.parse(msg);
 
@@ -37,6 +37,8 @@ export function useTerminalStatuses(terminals: { id: number }[]) {
 
       } catch {}
     });
+    
+    return unsubscribe;
   }, []);
 
   return statuses;

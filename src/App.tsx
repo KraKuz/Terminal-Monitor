@@ -21,6 +21,7 @@ import { useTerminalStatuses } from "./hooks/useTerminalStatuses";
 import { useOrderInfo } from "./hooks/useOrderInfo";
 import { useOrderDetails } from "./hooks/useOrderDetails";
 import { useTrafficLight } from "./hooks/useTrafficLight";
+import { useWsConnection } from "./hooks/useWsConnection";
 
 function App() {
 
@@ -45,6 +46,8 @@ function App() {
   const orderItems = useOrderDetails(selectedTerminal?.id ?? null);
   
   const handleSelectTerminal = (terminal: Terminal) => { setSelectedTerminal(terminal); };
+
+  useWsConnection();
 
   return (
     <div className="app-container">

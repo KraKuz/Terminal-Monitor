@@ -20,7 +20,7 @@ export function useOrderInfo(terminalId?: number) {
   }, [terminalId]);
 
   useEffect(() => {
-    wsService.connect((msg) => {
+    const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed = JSON.parse(msg);
 
@@ -41,6 +41,8 @@ export function useOrderInfo(terminalId?: number) {
 
       } catch {}
     });
+
+    return unsubscribe;
   }, []);
 
   return orderInfo;

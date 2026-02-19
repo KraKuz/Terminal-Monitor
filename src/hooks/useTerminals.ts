@@ -10,7 +10,7 @@ export function useTerminals() {
   const [terminals, setTerminals] = useState<Terminal[]>([]);
 
   useEffect(() => {
-    wsService.connect((msg) => {
+    const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed = JSON.parse(msg);
 
@@ -25,6 +25,8 @@ export function useTerminals() {
     });
 
     wsService.send("[getterminals]");
+
+    return unsubscribe;
   }, []);
 
   return terminals;

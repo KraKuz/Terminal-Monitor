@@ -43,7 +43,7 @@ export function useOrderDetails(terminalId: number | null) {
   }, [terminalId]);
 
   useEffect(() => {
-    const handleMessage = (msg: string) => {
+    const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed: OrderDetailsRaw[] = JSON.parse(msg);
 
@@ -61,9 +61,9 @@ export function useOrderDetails(terminalId: number | null) {
           setOrderItems(mapped);
         }
       } catch {}
-    };
+    });
 
-    wsService.connect(handleMessage);
+    return unsubscribe;
   }, []);
 
   return orderItems;

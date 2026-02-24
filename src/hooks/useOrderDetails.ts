@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { wsService } from "../services/wsService";
+import { OrderInfoData } from "./useOrderInfo";
 
 export type OrderDetailsRaw = {
   Type1CId: number;
@@ -16,55 +17,71 @@ export type OrderDetailsRaw = {
 };
 
 export type OrderItem = {
-  id: number;        // индекс + 1
-  name: string;      // FullName
-  plan: string;      // Div + Rem
-  fact: string;      // DivReal + RemReal
+  id: number;
+  name: string;
+  plan: string;
+  fact: string;
   status: "none" | "more" | "done" | "loading";
   isUpdating: boolean;
   raw: OrderDetailsRaw;
 };
 
-export function useOrderDetails(terminalId: number | null) {
+export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: number | null) {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
 
   useEffect(() => {
-    if (terminalId === null || terminalId === undefined) return;
+    if (!orderInfo || terminalId == null) {
+      setOrderItems([]);
+      return;
+    }
 
+    const orderId = orderInfo.id;
+    const startDate = orderInfo.shipmentStart;
     const fetchOrder = () => {
-      wsService.send(`[getorderdetails]|#|terminalid=${terminalId}|#|orderid=0|#|startdate=0`);
-      // orderid и startdate заменить на реальные
+      const msg = `[getorderdetails]|#|terminalid=${terminalId}|#|orderid=${orderId}|#|startdate=${startDate}`;
+      //console.log('📤 Sending getorderdetails:', msg);
+      wsService.send(msg);
     };
 
     const interval = setInterval(fetchOrder, 1000);
-    fetchOrder(); // первый вызов сразу
+    fetchOrder();
 
     return () => clearInterval(interval);
-  }, [terminalId]);
+  }, [orderInfo, terminalId]);
 
-  useEffect(() => {
-    const unsubscribe = wsService.subscribe((msg) => {
-      try {
-        const parsed: OrderDetailsRaw[] = JSON.parse(msg);
+useEffect(() => {
+  const unsubscribe = wsService.subscribe((msg) => {
+    try {
+      const parsed = JSON.parse(msg);
 
-        if (Array.isArray(parsed) && parsed.length) {
-          const mapped = parsed.map((item, index) => ({
-            id: index + 1,
-            name: item.FullName,
-            plan: `${item.Div}+${item.Rem}`,
-            fact: `${item.DivReal}+${item.RemReal}`,
-            status: item.State,
-            isUpdating: item.IsUpdated,
-            raw: item,
-          }));
+      if (!parsed.Header?.startsWith("[getorderdetails]")) return;
 
-          setOrderItems(mapped);
-        }
-      } catch {}
-    });
+      // ❗ фильтр по терминалу
+      if (parsed.Query?.TerminalId !== terminalId) return;
 
-    return unsubscribe;
-  }, []);
+      const body = typeof parsed.Body === "string"
+        ? JSON.parse(parsed.Body)
+        : parsed.Body;
+
+      if (!Array.isArray(body)) return;
+
+      const mapped = body.map((item, index) => ({
+        id: index + 1,
+        name: item.FullName,
+        plan: `${item.Div}+${item.Rem}`,
+        fact: `${item.DivReal}+${item.RemReal}`,
+        status: item.State,
+        isUpdating: item.IsUpdated,
+        raw: item,
+      }));
+
+      setOrderItems(mapped);
+
+    } catch {}
+  });
+
+  return unsubscribe;
+}, [terminalId]);
 
   return orderItems;
 }

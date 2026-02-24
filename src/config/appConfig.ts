@@ -1,5 +1,5 @@
 export const appConfig = {
-  url: "ws://192.168.0.49:8887",
+  url: "ws://192.168.0.43:30005", // "ws://192.168.0.43:30005"
 
   demo: {
     enabled: true,

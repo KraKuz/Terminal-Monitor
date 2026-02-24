@@ -3,41 +3,70 @@ import { wsService } from "../services/wsService";
 
 type TerminalStatusMap = Record<number, boolean>;
 
-export function useTerminalStatuses(terminals: { id: number }[]) {
+export function useTerminalStatuses(
+  terminals: { id: number }[],
+  excludedTerminalId: number | null = null
+) {
   const [statuses, setStatuses] = useState<TerminalStatusMap>({});
 
   useEffect(() => {
-    if (!terminals.length) return;
+    if (!terminals || terminals.length === 0) return;
 
     const checkStatuses = () => {
       terminals.forEach(t => {
-        wsService.send(`[getorder:${t.id}]`);
+        // пропускаем выбранный терминал
+        if (t.id === excludedTerminalId) return;
+
+        const message = `[getorderinfo]|#|terminalid=${t.id}`;
+        wsService.send(message);
+        console.log('📤 Sending status check:', message);
       });
     };
 
-    const interval = setInterval(checkStatuses, 4000);
-
-    checkStatuses(); // первый запуск сразу
+    const interval = setInterval(checkStatuses, 1000);
+    checkStatuses();
 
     return () => clearInterval(interval);
-  }, [terminals]);
+  }, [terminals, excludedTerminalId]);
 
   useEffect(() => {
     const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed = JSON.parse(msg);
+        console.log('📊 Parsed wrapper in statuses:', parsed);
 
-        // сервер вернул заказ
-        if (parsed.orderItems !== undefined && parsed.terminalId !== undefined) {
-          setStatuses(prev => ({
-            ...prev,
-            [parsed.terminalId]: parsed.orderItems.length > 0
-          }));
+        if (parsed.Header?.startsWith("[getorderinfo]")) {
+          const body = parsed.Body;
+          const terminalId = parsed.Query?.TerminalId;
+
+          if (terminalId == null) return;
+
+          let hasOrder = false;
+
+          if (typeof body === "string") {
+            try {
+              const parsedBody = JSON.parse(body);
+              if (Array.isArray(parsedBody)) {
+                hasOrder = parsedBody.length > 0;
+              } else if (parsedBody && typeof parsedBody === "object") {
+                hasOrder = Object.keys(parsedBody).length > 0;
+              }
+            } catch {
+              hasOrder = body !== "Заказ не найден";
+            }
+          } else if (Array.isArray(body)) {
+            hasOrder = body.length > 0;
+          } else if (body && typeof body === "object") {
+            hasOrder = true;
+          }
+
+          setStatuses(prev => ({ ...prev, [terminalId]: hasOrder }));
         }
-
-      } catch {}
+      } catch (e) {
+        console.error('📊 ❌ Error in statuses handler:', e);
+      }
     });
-    
+
     return unsubscribe;
   }, []);
 

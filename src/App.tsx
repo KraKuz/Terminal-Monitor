@@ -25,29 +25,30 @@ import { useWsConnection } from "./hooks/useWsConnection";
 
 function App() {
 
-  // текущее время
-  const currentTime = useCurrentTime();
+  useWsConnection();
 
-  // есть ли соединение
+  const currentTime = useCurrentTime();
   const isWsAlive = useWsHealth();
 
   // выбранный терминал
-  const [selectedTerminal, setSelectedTerminal] = useState<Terminal | null>(null);
+  const [selectedTerminalId, setSelectedTerminalId] = React.useState<number | null>(null);
 
-  // список терминалов
   const terminals = useTerminals();
-  const terminalStatuses = useTerminalStatuses(terminals);
+
+  const selectedTerminal = terminals.find(t => t.id === selectedTerminalId) ?? null;
+
+  const terminalStatuses = useTerminalStatuses(terminals, selectedTerminal?.id ?? null);
 
   const orderInfo = useOrderInfo(selectedTerminal?.id);
 
   const trafficLight = useTrafficLight(selectedTerminal?.id ?? null);
 
   // позиции заказа
-  const orderItems = useOrderDetails(selectedTerminal?.id ?? null);
+  const orderItems = useOrderDetails(orderInfo, selectedTerminal?.id ?? null);
   
-  const handleSelectTerminal = (terminal: Terminal) => { setSelectedTerminal(terminal); };
-
-  useWsConnection();
+  const handleSelectTerminal = (terminal: Terminal) => {
+    setSelectedTerminalId(terminal.id);
+  };
 
   return (
     <div className="app-container">

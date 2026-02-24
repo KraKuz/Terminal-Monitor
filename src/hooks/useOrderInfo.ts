@@ -14,36 +14,42 @@ export function useOrderInfo(terminalId?: number) {
 
   useEffect(() => {
     if (!terminalId) return;
-
     wsService.send(`[getorderinfo]|#|terminalid=${terminalId}`);
-
   }, [terminalId]);
 
   useEffect(() => {
-    const unsubscribe = wsService.subscribe((msg) => {
-      try {
-        const parsed = JSON.parse(msg);
+  const unsubscribe = wsService.subscribe((msg) => {
+    try {
+      const parsed = JSON.parse(msg);
 
-        if (
-          parsed.Id !== undefined &&
-          parsed.Name &&
-          parsed.OrderDate &&
-          parsed.Contractor
-        ) {
-          setOrderInfo({
-            id: parsed.Id,
-            name: parsed.Name,
-            orderDate: parsed.OrderDate,
-            contractor: parsed.Contractor,
-            shipmentStart: parsed.ShipmentStart
-          });
-        }
+      if (!parsed.Header?.startsWith("[getorderinfo]")) return;
 
-      } catch {}
-    });
+      // ❗ ВАЖНО: фильтруем по текущему терминалу
+      if (parsed.Query?.TerminalId !== terminalId) return;
 
-    return unsubscribe;
-  }, []);
+      const body = parsed.Body;
+
+      if (typeof body === "string" && body === "Заказ не найден") {
+        setOrderInfo(null);
+        return;
+      }
+
+      const data = typeof body === "string" ? JSON.parse(body) : body;
+
+      if (data?.Id) {
+        setOrderInfo({
+          id: data.Id,
+          name: data.Name,
+          orderDate: data.OrderDate,
+          contractor: data.Contractor,
+          shipmentStart: data.ShipmentStart
+        });
+      }
+    } catch {}
+  });
+
+  return unsubscribe;
+}, [terminalId]);
 
   return orderInfo;
 }

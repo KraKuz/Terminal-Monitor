@@ -15,6 +15,11 @@ function OrderTable({ items }: OrderTableProps) {
     return order[a.status!] - order[b.status!];
   });
 
+  const displayedItems = sortedItems.map((item, index) => ({
+  ...item,
+  id: index + 1, // айди всегда 1..N
+  }));
+
   return (
     <table className="order-table">
       <thead>
@@ -27,7 +32,7 @@ function OrderTable({ items }: OrderTableProps) {
       </thead>
 
       <tbody>
-        {sortedItems.map(item => (
+        {displayedItems.map(item => (
           <tr
             key={item.id}
             className={`status-${item.status} ${

@@ -24,11 +24,11 @@ function Footer({ visible }: FooterProps) {
           <td>Оранжевый</td>
           <td>Больше чем в заказе</td>
         </tr>
-        <tr className="status-done">
+        <tr className="status-equal">
           <td>Зелёный</td>
           <td>Погрузка выполнена</td>
         </tr>
-        <tr className="status-loading">
+        <tr className="status-less">
           <td>Белый</td>
           <td>Погрузка</td>
         </tr>

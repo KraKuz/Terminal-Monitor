@@ -12,7 +12,7 @@ export type OrderDetailsRaw = {
   Rem: number;
   DivReal: number;
   RemReal: number;
-  State: "none" | "more" | "done" | "loading";
+  State: "none" | "more" | "equal" | "less";
   IsUpdated: boolean;
 };
 
@@ -21,10 +21,20 @@ export type OrderItem = {
   name: string;
   plan: string;
   fact: string;
-  status: "none" | "more" | "done" | "loading";
+  status: "none" | "more" | "equal" | "less";
   isUpdating: boolean;
   raw: OrderDetailsRaw;
 };
+
+function mapStateToStatus(state: number): "none" | "more" | "equal" | "less" {
+  switch(state) {
+    case 0: return "none";     // NotInOrder
+    case 1: return "more";     // TooMany
+    case 2: return "less";     // InWork
+    case 3: console.log("EQUAL"); return "equal";    // Complete
+    default: return "less";
+  }
+}
 
 export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: number | null) {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
@@ -68,9 +78,9 @@ useEffect(() => {
       const mapped = body.map((item, index) => ({
         id: index + 1,
         name: item.FullName,
-        plan: `${item.Div}+${item.Rem}`,
-        fact: `${item.DivReal}+${item.RemReal}`,
-        status: item.State,
+        plan: `${item.AmountTotal.toString()} (${item.Div}+${item.Rem})`,
+        fact: `${item.AmountCurrent.toString()} (${item.DivReal}+${item.RemReal})`,
+        status: mapStateToStatus(item.State),
         isUpdating: item.IsUpdated,
         raw: item,
       }));

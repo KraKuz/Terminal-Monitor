@@ -206,12 +206,12 @@
   background-color: var(--pastel-orange);
 }
 
-.status-done {
-  background-color: var(--pastel-green);
+.status-less {
+  background-color: white;
 }
 
-.status-loading {
-  background-color: white;
+.status-equal {
+  background-color: var(--pastel-green);
 }
 
 /* --- Подвал --- */

@@ -5,10 +5,14 @@ type OrderTableProps = {
 };
 
 function OrderTable({ items }: OrderTableProps) {
+// суммарные палеты
+  const totalPlan = items.reduce((sum, item) => sum + (item.raw?.Div || 0), 0);
+  const totalFact = items.reduce((sum, item) => sum + (item.raw?.DivReal || 0), 0);
+
   // сортировка по статусу
   const sortedItems = [...items].sort((a, b) => {
-    const order = { none: 0, more: 1, loading: 2, done: 3 };
-    return order[a.status] - order[b.status];
+    const order = { none: 0, more: 1, less: 2, equal: 3 };
+    return order[a.status!] - order[b.status!];
   });
 
   return (
@@ -17,8 +21,8 @@ function OrderTable({ items }: OrderTableProps) {
         <tr>
           <th className="col-id">№ п/п</th>
           <th>Наименование</th>
-          <th className="col-plan">План (n)</th>
-          <th className="col-fact">Факт (n)</th>
+          <th className="col-plan">План ({totalPlan})</th>
+          <th className="col-fact">Факт ({totalFact})</th>
         </tr>
       </thead>
 
@@ -30,7 +34,7 @@ function OrderTable({ items }: OrderTableProps) {
               item.isUpdating ? "updating" : ""
             }`}
           >
-            <td >{item.id}</td>
+            <td>{item.id}</td>
             <td>{item.name}</td>
             <td>{item.plan}</td>
             <td>{item.fact}</td>

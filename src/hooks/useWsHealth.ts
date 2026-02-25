@@ -15,6 +15,8 @@ export function useWsHealth() {
       } catch (e) {}
     });
 
+    wsService.send("[health]");
+
     const interval = setInterval(() => {
       wsService.send("[health]");
     }, 5000);

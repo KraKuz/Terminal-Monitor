@@ -1,3 +1,4 @@
+// src/components/OrderTable.tsx
 import { OrderItem } from "../types/OrderItem";
 
 type OrderTableProps = {
@@ -5,19 +6,23 @@ type OrderTableProps = {
 };
 
 function OrderTable({ items }: OrderTableProps) {
-// суммарные палеты
+  // суммарные палеты 
   const totalPlan = items.reduce((sum, item) => sum + (item.raw?.Div || 0), 0);
   const totalFact = items.reduce((sum, item) => sum + (item.raw?.DivReal || 0), 0);
 
-  // сортировка по статусу
+  // сортировка по видимому статусу 
+  const orderMap: Record<string, number> = { none: 0, more: 1, less: 2, equal: 3 };
+
   const sortedItems = [...items].sort((a, b) => {
-    const order = { none: 0, more: 1, less: 2, equal: 3 };
-    return order[a.status!] - order[b.status!];
+    const as = (a.displayStatus ?? a.status) as keyof typeof orderMap;
+    const bs = (b.displayStatus ?? b.status) as keyof typeof orderMap;
+    return orderMap[as] - orderMap[bs];
   });
 
+  // отображаемые номера 
   const displayedItems = sortedItems.map((item, index) => ({
-  ...item,
-  id: index + 1, // айди всегда 1..N
+    ...item,
+    id: index + 1,
   }));
 
   return (
@@ -34,10 +39,8 @@ function OrderTable({ items }: OrderTableProps) {
       <tbody>
         {displayedItems.map(item => (
           <tr
-            key={item.id}
-            className={`status-${item.status} ${
-              item.isUpdating ? "updating" : ""
-            }`}
+            key={item.raw?.Type1CId ?? item.id}
+            className={`status-${(item.displayStatus ?? item.status)} ${item.isUpdating ? "updating" : ""}`}
           >
             <td>{item.id}</td>
             <td>{item.name}</td>

@@ -13,9 +13,17 @@ export function useOrderInfo(terminalId?: number) {
   const [orderInfo, setOrderInfo] = useState<OrderInfoData | null>(null);
 
   useEffect(() => {
-    if (!terminalId) return;
+  if (!terminalId) return;
+
+  const fetch = () => {
     wsService.send(`[getorderinfo]|#|terminalid=${terminalId}`);
-  }, [terminalId]);
+  };
+
+  fetch(); // сразу
+  const interval = setInterval(fetch, 1000);
+
+  return () => clearInterval(interval);
+}, [terminalId]);
 
   useEffect(() => {
   const unsubscribe = wsService.subscribe((msg) => {

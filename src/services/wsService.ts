@@ -5,7 +5,7 @@ type Listener = (msg: string) => void;
 class WSService {
   private socket: WebSocket | null = null;
   private listeners: Set<Listener> = new Set();
-  private messageQueue: string[] = []; // Очередь сообщений, отправленных до открытия сокета
+  private messageQueue: string[] = []; // очередь сообщений, отправленных до открытия сокета
 
   connect() {
     if (this.socket) return;
@@ -13,7 +13,7 @@ class WSService {
     this.socket = new WebSocket(appConfig.url);
 
     this.socket.onopen = () => {
-      // Отправляем все накопившиеся сообщения
+      // все накопившиеся сообщения
       while (this.messageQueue.length) {
         const msg = this.messageQueue.shift();
         if (msg) this.socket?.send(msg);

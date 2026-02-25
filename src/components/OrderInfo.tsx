@@ -10,7 +10,6 @@ type OrderInfoProps = {
 };
 
 function OrderInfo({ terminal, orderInfo, trafficLight }: OrderInfoProps) {
-  // три состояния: green, red, default(gray)
   const trafficClass =
     trafficLight === "Allowed" || trafficLight === "PartiallyAllowed"
       ? "traffic-green"
@@ -32,7 +31,6 @@ function OrderInfo({ terminal, orderInfo, trafficLight }: OrderInfoProps) {
       </div>
 
       <div className="order-right">
-        {/* Доп. индикация — текстом (опционально) */}
         <p style={{ fontSize: 14, margin: 0 }}>
           Светофор: {trafficLight ?? "Unknown"}
         </p>

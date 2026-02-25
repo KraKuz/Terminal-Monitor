@@ -18,7 +18,6 @@ export function useTrafficLight(terminalId: number | null) {
       wsService.send(`[gettrafficlightstatus]|#|terminalid=${terminalId}`);
     };
 
-    // первый вызов сразу, потом интервал
     fetchStatus();
     const interval = setInterval(fetchStatus, 1000);
 
@@ -31,13 +30,10 @@ export function useTrafficLight(terminalId: number | null) {
       try {
         const parsed = JSON.parse(msg);
 
-        // фильтруем по заголовку
         if (!parsed.Header || !parsed.Header.toString().startsWith("[gettrafficlightstatus]")) return;
 
-        // фильтруем по terminalId в Query
         if (parsed.Query?.TerminalId !== terminalId) return;
 
-        // Body может быть строкой JSON или объектом
         const rawBody = parsed.Body;
         let body: WrappedTrafficLight | null = null;
         if (typeof rawBody === "string") {
@@ -52,7 +48,6 @@ export function useTrafficLight(terminalId: number | null) {
 
         if (!body) return;
 
-        // Если есть Value — используем его; если нет, но есть Key — маппим на значение
         if (body.Value) {
           setStatus(body.Value);
         } else if (typeof body.Key === "number") {
@@ -70,7 +65,7 @@ export function useTrafficLight(terminalId: number | null) {
           setStatus(v);
         }
       } catch (e) {
-        // Игнорируем неверные/непарсируемые сообщения
+        // игнор неверные/непарсируемые сообщения
       }
     });
 

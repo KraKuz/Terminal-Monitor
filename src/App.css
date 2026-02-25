@@ -1,5 +1,4 @@
 :root {
-  /* Постельные цвета */
   --pastel-blue: #b7dff2;
   --pastel-green: #94e694;
   --pastel-red: #ffb2b2;
@@ -9,7 +8,6 @@
   --pastel-dark-white: #f5f7f8;
   --pastel-grey: #d0d7de;
 
-  /* Цвета светофора */
   --traffic-light-red: #ff3030;
   --traffic-light-red-border: #990000;
   --traffic-light-green: #4aff96;
@@ -25,7 +23,6 @@
 }
 
 /* --- Статусы светофора --- */
-
 .traffic-green {
   background-color: var(--traffic-light-green);
   border: 2px solid var(--traffic-light-green-border);

@@ -32,7 +32,6 @@ export function useOrderInfo(terminalId?: number) {
 
       if (!parsed.Header?.startsWith("[getorderinfo]")) return;
 
-      // ❗ ВАЖНО: фильтруем по текущему терминалу
       if (parsed.Query?.TerminalId !== terminalId) return;
 
       const body = parsed.Body;

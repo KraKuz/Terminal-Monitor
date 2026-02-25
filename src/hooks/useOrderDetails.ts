@@ -78,8 +78,6 @@ export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: num
             const incomingIsUpdated = !!it.IsUpdated;
 
             if (incomingIsUpdated) {
-              // начало (или продолжение) анимации: показываем старый видимый статус (если есть),
-              // запоминаем nextStatus и ставим isUpdating = true.
               const displayStatus = existing ? (existing.displayStatus ?? existing.status) : canonicalStatus;
 
               // сбрасываем старые таймеры и ставим новый
@@ -94,7 +92,6 @@ export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: num
                     if (ci.raw?.Type1CId === typeId) {
                       return {
                         ...ci,
-                        // применяем уже пришедший canonical
                         status: canonicalStatus,
                         displayStatus: canonicalStatus,
                         isUpdating: false,
@@ -109,22 +106,18 @@ export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: num
               }, ANIMATION_MS);
 
               return {
-                id: idx + 1, // временный — финальное позиционирование делается в таблице
+                id: idx + 1,
                 name: it.FullName,
                 plan: `${it.AmountTotal.toString()} (${it.Div}+${it.Rem})`,
                 fact: `${it.AmountCurrent.toString()} (${it.DivReal}+${it.RemReal})`,
-                status: canonicalStatus,      // canonical хранится, но не отображаем пока isUpdating
-                displayStatus: displayStatus, // видимый статус остаётся старым
+                status: canonicalStatus,
+                displayStatus: displayStatus,
                 isUpdating: true,
                 nextStatus: canonicalStatus,
                 raw: it,
               };
             } else {
-              // Нет флага IsUpdated — нормальное состояние.
-              // Если был активный таймер для этого элемента — подождём завершения таймера (не перезаписываем),
-              // но если таймера нет, просто устанавливаем status/displayStatus.
               if (timersRef.current[typeId]) {
-                // есть таймер — оставляем isUpdating=true и nextStatus = canonical
                 const existingDisplay = existing ? (existing.displayStatus ?? existing.status) : canonicalStatus;
                 return {
                   id: idx + 1,
@@ -153,7 +146,7 @@ export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: num
             }
           });
 
-          // Очистим таймеры для элементов, которых в новом массиве больше нет
+          // очистка таймеров для элементов, которых в новом массиве больше нет
           const presentIds = new Set(body.map((it: any) => it.Type1CId));
           for (const keyStr of Object.keys(timersRef.current)) {
             const key = Number(keyStr);
@@ -174,7 +167,7 @@ export function useOrderDetails(orderInfo: OrderInfoData | null, terminalId: num
     return unsubscribe;
   }, [terminalId]);
 
-  // cleanup all timers on unmount
+  // cleanup all timers
   useEffect(() => {
     return () => {
       Object.values(timersRef.current).forEach(t => t && clearTimeout(t));

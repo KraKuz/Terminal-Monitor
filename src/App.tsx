@@ -30,20 +30,15 @@ function App() {
   const currentTime = useCurrentTime();
   const isWsAlive = useWsHealth();
 
-  // выбранный терминал
   const [selectedTerminalId, setSelectedTerminalId] = React.useState<number | null>(null);
-
   const terminals = useTerminals();
-
   const selectedTerminal = terminals.find(t => t.id === selectedTerminalId) ?? null;
-
   const terminalStatuses = useTerminalStatuses(terminals, selectedTerminal?.id ?? null);
 
   const orderInfo = useOrderInfo(selectedTerminal?.id);
 
   const trafficLight = useTrafficLight(selectedTerminal?.id ?? null);
 
-  // позиции заказа
   const orderItems = useOrderDetails(orderInfo, selectedTerminal?.id ?? null);
   
   const handleSelectTerminal = (terminal: Terminal) => {

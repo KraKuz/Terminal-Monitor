@@ -125,7 +125,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 20px;
+  padding: 10px;
   margin: 10px 20px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -151,6 +151,8 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 18px;
+  font-weight: bold;
+  color: #474747;
   table-layout: fixed;
   background: white;
   border-radius: 10px;
@@ -255,6 +257,8 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 18px;
+    font-weight: bold;
+  color: #474747;
   background: white;
   border-radius: 10px;
   overflow: hidden;

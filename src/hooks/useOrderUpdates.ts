@@ -8,26 +8,36 @@ type Params = {
 export function useOrderUpdates({ setOrderItems }: Params) {
   useEffect(() => {
     const toggleRow = () => {
-  setOrderItems(prev => {
-    const updated = [...prev];
-    const idx = 1;
+      setOrderItems(prev => {
+        const updated = [...prev];
+        const idx = 1;
 
-    updated[idx] = {
-      ...updated[idx],
-      isUpdating: true,
+        const item = updated[idx];
+
+        updated[idx] = {
+          ...item,
+          isUpdating: true,
+          displayStatus: item.displayStatus ?? item.status
+        };
+
+        return updated;
+      });
+
+      setTimeout(() => {
+        setOrderItems(prev => {
+          const updated = [...prev];
+          const item = updated[1];
+
+          updated[1] = {
+            ...item,
+            isUpdating: false,
+            displayStatus: item.status
+          };
+
+          return updated;
+        });
+      }, 2000);
     };
-
-    return updated;
-  });
-
-  setTimeout(() => {
-    setOrderItems(prev => {
-      const updated = [...prev];
-      updated[1] = { ...updated[1], isUpdating: false };
-      return updated;
-    });
-  }, 2000);
-};
 
     const interval = setInterval(toggleRow, 4000);
     return () => clearInterval(interval);

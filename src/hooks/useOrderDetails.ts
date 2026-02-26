@@ -1,4 +1,3 @@
-// src/hooks/useOrderDetails.ts
 import { useEffect, useRef, useState } from "react";
 import { wsService } from "../services/wsService";
 import { OrderInfoData } from "./useOrderInfo";

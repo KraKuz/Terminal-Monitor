@@ -5,35 +5,42 @@ type OrderTableProps = {
   items: OrderItem[];
 };
 
-type DisplayItem = OrderItem & {
-  zebraClass?: "zebra-odd" | "zebra-even";
-};
+type WithMeta = OrderItem & { originalIndex: number; zebraClass?: "zebra-odd" | "zebra-even" };
 
 function OrderTable({ items }: OrderTableProps) {
-  // суммарные палеты (берём raw, если есть)
+  // суммарные палеты
   const totalPlan = items.reduce((sum, item) => sum + (item.raw?.Div || 0), 0);
   const totalFact = items.reduce((sum, item) => sum + (item.raw?.DivReal || 0), 0);
 
-  // сортировка по статусу (порядок: none, more, less, equal)
+  const withMeta: WithMeta[] = items.map((it, idx) => ({ ...it, originalIndex: idx }));
+
+  // порядок статусов
   const orderRank: Record<string, number> = { none: 0, more: 1, less: 2, equal: 3 };
-  const sortedItems = [...items].sort((a, b) => {
-    return (orderRank[a.status ?? "none"] ?? 0) - (orderRank[b.status ?? "none"] ?? 0);
-  });
 
-  // Присвоим класс зебры только строкам со статусом "less".
-  // Счётчик считает только такие строки, чтобы зебра шла среди белых полей.
+const getSortStatus = (item: WithMeta) =>
+  item.isUpdating
+    ? item.displayStatus ?? item.status
+    : item.status;
+
+const sorted = [...withMeta].sort((a, b) => {
+  const ra = orderRank[getSortStatus(a) ?? "none"] ?? 0;
+  const rb = orderRank[getSortStatus(b) ?? "none"] ?? 0;
+
+  if (ra !== rb) return ra - rb;
+  return a.originalIndex - b.originalIndex;
+});
+
   let lessCounter = 0;
-  const displayedItems: DisplayItem[] = sortedItems.map((item, index) => {
-    const base: DisplayItem = { ...item };
-    // id показываем всегда по порядку 1..N (внешний индекс)
-    base.id = index + 1;
-
+  const displayedItems = sorted.map((item, sortedIndex) => {
+    const out: WithMeta = { ...item };
+    out.id = sortedIndex + 1;
     if (item.status === "less") {
       lessCounter += 1;
-      base.zebraClass = lessCounter % 2 === 0 ? "zebra-even" : "zebra-odd";
+      out.zebraClass = lessCounter % 2 === 0 ? "zebra-even" : "zebra-odd";
+    } else {
+      out.zebraClass = undefined;
     }
-
-    return base;
+    return out;
   });
 
   return (
@@ -50,9 +57,9 @@ function OrderTable({ items }: OrderTableProps) {
       <tbody>
         {displayedItems.map(item => (
           <tr
-            key={`${item.raw?.Type1CId ?? item.id}-${item.id}`}
+            key={`${item.raw?.Type1CId ?? item.id}-${item.originalIndex}`}
             className={[
-              `status-${item.status ?? "none"}`,
+              `status-${(item.isUpdating ? item.displayStatus : item.status) ?? "none"}`,
               item.isUpdating ? "updating" : "",
               item.zebraClass ? item.zebraClass : ""
             ].join(" ").trim()}

@@ -1,4 +1,3 @@
-// src/types/OrderItem.ts
 export type Status = "none" | "more" | "equal" | "less";
 
 export type OrderDetailsRaw = {

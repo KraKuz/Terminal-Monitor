@@ -19,7 +19,7 @@ export function useOrderInfo(terminalId?: number) {
     wsService.send(`[getorderinfo]|#|terminalid=${terminalId}`);
   };
 
-  fetch(); // сразу
+  fetch();
   const interval = setInterval(fetch, 1000);
 
   return () => clearInterval(interval);

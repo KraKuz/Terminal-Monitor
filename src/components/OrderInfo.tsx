@@ -1,4 +1,3 @@
-// src/components/OrderInfo.tsx
 import { Terminal } from "../types/Terminal";
 import { OrderInfoData } from "../hooks/useOrderInfo";
 import { TrafficLightStatus } from "../types/TrafficLight";

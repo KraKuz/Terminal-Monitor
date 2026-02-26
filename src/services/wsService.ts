@@ -56,7 +56,7 @@ class WSService {
   }
 
   send(message: string) {
-  console.log('🟢 SENDING:', message); // <-- ЛОГ
+  //console.log('🟢 SENDING:', message); // <-- ЛОГ
   if (!this.socket || this.socket.readyState !== WebSocket.OPEN) {
     this.messageQueue.push(message);
     return;

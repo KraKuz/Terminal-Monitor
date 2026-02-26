@@ -181,6 +181,22 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
+/* Зебра для белых строк */
+.order-table tbody tr.status-less.zebra-odd {
+  background-color: white; /* явно белый */
+}
+
+.order-table tbody tr.status-less.zebra-even {
+  background-color: var(--pastel-dark-white); /* чуть серый */
+}
+
+/* Сохраняем приоритет для анимации обновления */
+.order-table tbody tr.updating {
+  background-color: yellow !important;
+  font-weight: bold;
+  transition: background-color 0.5s ease;
+}
+
 .col-id {
   width: 8%;
   max-width: 8%;

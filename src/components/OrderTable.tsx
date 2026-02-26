@@ -1,29 +1,40 @@
-// src/components/OrderTable.tsx
+import React from "react";
 import { OrderItem } from "../types/OrderItem";
 
 type OrderTableProps = {
   items: OrderItem[];
 };
 
+type DisplayItem = OrderItem & {
+  zebraClass?: "zebra-odd" | "zebra-even";
+};
+
 function OrderTable({ items }: OrderTableProps) {
-  // суммарные палеты 
+  // суммарные палеты (берём raw, если есть)
   const totalPlan = items.reduce((sum, item) => sum + (item.raw?.Div || 0), 0);
   const totalFact = items.reduce((sum, item) => sum + (item.raw?.DivReal || 0), 0);
 
-  // сортировка по видимому статусу 
-  const orderMap: Record<string, number> = { none: 0, more: 1, less: 2, equal: 3 };
-
+  // сортировка по статусу (порядок: none, more, less, equal)
+  const orderRank: Record<string, number> = { none: 0, more: 1, less: 2, equal: 3 };
   const sortedItems = [...items].sort((a, b) => {
-    const as = (a.displayStatus ?? a.status) as keyof typeof orderMap;
-    const bs = (b.displayStatus ?? b.status) as keyof typeof orderMap;
-    return orderMap[as] - orderMap[bs];
+    return (orderRank[a.status ?? "none"] ?? 0) - (orderRank[b.status ?? "none"] ?? 0);
   });
 
-  // отображаемые номера 
-  const displayedItems = sortedItems.map((item, index) => ({
-    ...item,
-    id: index + 1,
-  }));
+  // Присвоим класс зебры только строкам со статусом "less".
+  // Счётчик считает только такие строки, чтобы зебра шла среди белых полей.
+  let lessCounter = 0;
+  const displayedItems: DisplayItem[] = sortedItems.map((item, index) => {
+    const base: DisplayItem = { ...item };
+    // id показываем всегда по порядку 1..N (внешний индекс)
+    base.id = index + 1;
+
+    if (item.status === "less") {
+      lessCounter += 1;
+      base.zebraClass = lessCounter % 2 === 0 ? "zebra-even" : "zebra-odd";
+    }
+
+    return base;
+  });
 
   return (
     <table className="order-table">
@@ -39,8 +50,12 @@ function OrderTable({ items }: OrderTableProps) {
       <tbody>
         {displayedItems.map(item => (
           <tr
-            key={item.raw?.Type1CId ?? item.id}
-            className={`status-${(item.displayStatus ?? item.status)} ${item.isUpdating ? "updating" : ""}`}
+            key={`${item.raw?.Type1CId ?? item.id}-${item.id}`}
+            className={[
+              `status-${item.status ?? "none"}`,
+              item.isUpdating ? "updating" : "",
+              item.zebraClass ? item.zebraClass : ""
+            ].join(" ").trim()}
           >
             <td>{item.id}</td>
             <td>{item.name}</td>

@@ -19,7 +19,7 @@ export function useTerminalStatuses(
 
         const message = `[getorderinfo]|#|terminalid=${t.id}`;
         wsService.send(message);
-        console.log('📤 Sending status check:', message);
+        //console.log('📤 Sending status check:', message);
       });
     };
 
@@ -33,7 +33,7 @@ export function useTerminalStatuses(
     const unsubscribe = wsService.subscribe((msg) => {
       try {
         const parsed = JSON.parse(msg);
-        console.log('📊 Parsed wrapper in statuses:', parsed);
+        //console.log('📊 Parsed wrapper in statuses:', parsed);
 
         if (parsed.Header?.startsWith("[getorderinfo]")) {
           const body = parsed.Body;
@@ -63,7 +63,7 @@ export function useTerminalStatuses(
           setStatuses(prev => ({ ...prev, [terminalId]: hasOrder }));
         }
       } catch (e) {
-        console.error('📊 ❌ Error in statuses handler:', e);
+        //console.error('📊 ❌ Error in statuses handler:', e);
       }
     });
 
